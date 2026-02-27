@@ -7,130 +7,65 @@
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --green-dark:  #1a7a1a;
-    --green-mid:   #2ea82e;
-    --green-lime:  #7ec820;
-    --green-light: #a8e040;
-    --bg-dark:     #1c2b1c;
-    --bg-mid:      #243324;
-    --bg-card:     #1e2e1e;
-    --surface:     #253625;
-    --border:      rgba(126,200,32,0.22);
-    --border-soft: rgba(126,200,32,0.12);
-    --text:        #f0f7e8;
-    --text-muted:  #8aac72;
-    --text-dim:    #5a7a4a;
-    --success-bg:  rgba(46,168,46,0.15);
-    --success-bdr: rgba(46,168,46,0.4);
-    --error-bg:    rgba(220,60,60,0.12);
-    --error-bdr:   rgba(220,60,60,0.35);
+    --green-dark:#1a7a1a;--green-mid:#2ea82e;--green-lime:#7ec820;--green-light:#a8e040;
+    --bg-dark:#1c2b1c;--bg-card:#1e2e1e;--surface:#253625;
+    --border:rgba(126,200,32,0.22);--border-soft:rgba(126,200,32,0.12);
+    --text:#f0f7e8;--text-muted:#8aac72;--text-dim:#5a7a4a;
+    --success-bg:rgba(46,168,46,0.15);--success-bdr:rgba(46,168,46,0.4);
+    --error-bg:rgba(220,60,60,0.12);--error-bdr:rgba(220,60,60,0.35);
   }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'Outfit', sans-serif;
-    background: var(--bg-dark);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2.5rem 1rem;
-    position: relative;
-    overflow-x: hidden;
-  }
-  body::before {
-    content: '';
-    position: fixed;
-    top: -20%; left: 50%;
-    transform: translateX(-50%);
-    width: 700px; height: 500px;
-    background: radial-gradient(ellipse, rgba(46,168,46,0.18) 0%, transparent 70%);
-    pointer-events: none; z-index: 0;
-  }
-  body::after {
-    content: '';
-    position: fixed;
-    bottom: -10%; right: -10%;
-    width: 400px; height: 400px;
-    background: radial-gradient(ellipse, rgba(126,200,32,0.09) 0%, transparent 65%);
-    pointer-events: none; z-index: 0;
-  }
-  .wrap { width: 100%; max-width: 500px; position: relative; z-index: 2; }
-  .header { text-align: center; margin-bottom: 2rem; animation: fadeDown 0.55s 0.05s ease both; }
-  .eyebrow {
-    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.2em;
-    text-transform: uppercase; color: var(--green-lime); margin-bottom: 0.65rem;
-    display: flex; align-items: center; justify-content: center; gap: 0.6rem;
-  }
-  .eyebrow::before, .eyebrow::after {
-    content: ''; display: inline-block; width: 28px; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--green-lime));
-  }
-  .eyebrow::after { background: linear-gradient(90deg, var(--green-lime), transparent); }
-  h1 { font-size: clamp(1.8rem, 5vw, 2.4rem); font-weight: 700; line-height: 1.2; color: var(--text); margin-bottom: 0.6rem; letter-spacing: -0.02em; }
-  h1 span { background: linear-gradient(90deg, var(--green-mid), var(--green-lime)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  .subtitle { font-size: 0.92rem; color: var(--text-muted); font-weight: 300; line-height: 1.6; }
-  .card {
-    background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 2.25rem;
-    box-shadow: 0 0 0 1px var(--border-soft), 0 4px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(126,200,32,0.08);
-    animation: fadeUp 0.6s 0.1s ease both;
-  }
-  .field { margin-bottom: 1.4rem; }
-  label { display: block; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; }
-  input[type="text"], input[type="tel"] {
-    width: 100%; padding: 0.85rem 1rem; font-family: 'Outfit', sans-serif; font-size: 0.97rem;
-    color: var(--text); background: var(--surface); border: 1px solid rgba(126,200,32,0.18);
-    border-radius: 10px; outline: none; transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-  }
-  input[type="text"]::placeholder, input[type="tel"]::placeholder { color: var(--text-dim); }
-  input[type="text"]:focus, input[type="tel"]:focus {
-    border-color: var(--green-lime); box-shadow: 0 0 0 3px rgba(126,200,32,0.15); background: rgba(37,54,37,0.9);
-  }
-  .dropzone {
-    border: 2px dashed rgba(126,200,32,0.3); border-radius: 12px; padding: 2.25rem 1.5rem;
-    text-align: center; cursor: pointer; transition: border-color 0.2s, background 0.2s;
-    background: var(--surface); position: relative;
-  }
-  .dropzone:hover, .dropzone.drag-over { border-color: var(--green-lime); background: rgba(126,200,32,0.06); }
-  .dropzone input[type="file"] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-  .dz-icon { font-size: 2.2rem; margin-bottom: 0.65rem; display: block; transition: transform 0.2s; }
-  .dropzone:hover .dz-icon { transform: scale(1.12) translateY(-2px); }
-  .dz-text { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 0.25rem; }
-  .dz-sub { font-size: 0.78rem; color: var(--text-muted); }
-  .dz-sub strong { color: var(--green-lime); }
-  .file-preview { display: none; align-items: center; gap: 0.75rem; padding: 0.85rem 1rem; background: var(--success-bg); border: 1px solid var(--success-bdr); border-radius: 10px; margin-top: 0.75rem; }
-  .file-preview.show { display: flex; }
-  .file-preview .fname { font-size: 0.88rem; font-weight: 500; color: var(--green-light); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .file-preview .remove-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.1rem; padding: 0.2rem; border-radius: 4px; transition: color 0.2s; }
-  .file-preview .remove-btn:hover { color: #ff6b6b; }
-  .status { display: none; padding: 0.85rem 1rem; border-radius: 10px; font-size: 0.88rem; margin-bottom: 1rem; border: 1px solid transparent; }
-  .status.show { display: block; }
-  .status.success { background: var(--success-bg); border-color: var(--success-bdr); color: var(--green-light); }
-  .status.error { background: var(--error-bg); border-color: var(--error-bdr); color: #ff8a8a; }
-  .btn-submit {
-    width: 100%; padding: 1rem 1.5rem; font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 600;
-    letter-spacing: 0.05em; color: #fff; border: none; border-radius: 12px; cursor: pointer;
-    background: linear-gradient(135deg, var(--green-dark), var(--green-mid));
-    box-shadow: 0 4px 20px rgba(46,168,46,0.35); transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
-    position: relative; overflow: hidden;
-  }
-  .btn-submit:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 6px 28px rgba(46,168,46,0.45); }
-  .btn-submit:active { transform: translateY(0); }
-  .btn-submit.loading { pointer-events: none; opacity: 0.75; }
-  .btn-submit.loading::after { content: ''; position: absolute; top: 50%; left: 50%; width: 18px; height: 18px; margin: -9px 0 0 -9px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
-  .success-screen { display: none; text-align: center; padding: 2rem; animation: fadeUp 0.5s ease both; }
-  .success-screen.show { display: block; }
-  .success-icon { font-size: 3.5rem; margin-bottom: 1rem; display: block; animation: pop 0.4s 0.1s ease both; }
-  .success-screen h2 { font-size: 1.6rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; }
-  .success-screen p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
-  .btn-otro { background: none; border: 1px solid var(--border); color: var(--text-muted); padding: 0.75rem 1.5rem; border-radius: 10px; cursor: pointer; font-family: 'Outfit', sans-serif; font-size: 0.9rem; transition: border-color 0.2s, color 0.2s; }
-  .btn-otro:hover { border-color: var(--green-lime); color: var(--green-lime); }
-  .privacy { margin-top: 1.5rem; font-size: 0.72rem; color: var(--text-dim); text-align: center; line-height: 1.6; }
-  @keyframes fadeDown { from { opacity:0; transform:translateY(-12px); } to { opacity:1; transform:translateY(0); } }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes pop { 0%{transform:scale(0.5);opacity:0;} 80%{transform:scale(1.1);} 100%{transform:scale(1);opacity:1;} }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Outfit',sans-serif;background:var(--bg-dark);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 1rem;position:relative;overflow-x:hidden;}
+  body::before{content:'';position:fixed;top:-20%;left:50%;transform:translateX(-50%);width:700px;height:500px;background:radial-gradient(ellipse,rgba(46,168,46,0.18) 0%,transparent 70%);pointer-events:none;z-index:0;}
+  body::after{content:'';position:fixed;bottom:-10%;right:-10%;width:400px;height:400px;background:radial-gradient(ellipse,rgba(126,200,32,0.09) 0%,transparent 65%);pointer-events:none;z-index:0;}
+  .wrap{width:100%;max-width:500px;position:relative;z-index:2;}
+  .header{text-align:center;margin-bottom:2rem;animation:fadeDown 0.55s 0.05s ease both;}
+  .eyebrow{font-size:0.68rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--green-lime);margin-bottom:0.65rem;display:flex;align-items:center;justify-content:center;gap:0.6rem;}
+  .eyebrow::before,.eyebrow::after{content:'';display:inline-block;width:28px;height:1px;background:linear-gradient(90deg,transparent,var(--green-lime));}
+  .eyebrow::after{background:linear-gradient(90deg,var(--green-lime),transparent);}
+  h1{font-size:clamp(1.8rem,5vw,2.4rem);font-weight:700;line-height:1.2;color:var(--text);margin-bottom:0.6rem;letter-spacing:-0.02em;}
+  h1 span{background:linear-gradient(90deg,var(--green-mid),var(--green-lime));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .subtitle{font-size:0.92rem;color:var(--text-muted);font-weight:300;line-height:1.6;}
+  .card{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:2.25rem;box-shadow:0 0 0 1px var(--border-soft),0 4px 40px rgba(0,0,0,0.5),inset 0 1px 0 rgba(126,200,32,0.08);animation:fadeUp 0.6s 0.1s ease both;}
+  .field{margin-bottom:1.4rem;}
+  label{display:block;font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:0.5rem;}
+  input[type="text"],input[type="tel"]{width:100%;padding:0.85rem 1rem;font-family:'Outfit',sans-serif;font-size:0.97rem;color:var(--text);background:var(--surface);border:1px solid rgba(126,200,32,0.18);border-radius:10px;outline:none;transition:border-color 0.2s,box-shadow 0.2s,background 0.2s;}
+  input[type="text"]::placeholder,input[type="tel"]::placeholder{color:var(--text-dim);}
+  input[type="text"]:focus,input[type="tel"]:focus{border-color:var(--green-lime);box-shadow:0 0 0 3px rgba(126,200,32,0.15);background:rgba(37,54,37,0.9);}
+  .dropzone{border:2px dashed rgba(126,200,32,0.3);border-radius:12px;padding:2.25rem 1.5rem;text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;background:var(--surface);position:relative;}
+  .dropzone:hover,.dropzone.drag-over{border-color:var(--green-lime);background:rgba(126,200,32,0.06);}
+  .dropzone input[type="file"]{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;}
+  .dz-icon{font-size:2.2rem;margin-bottom:0.65rem;display:block;transition:transform 0.2s;}
+  .dropzone:hover .dz-icon{transform:scale(1.12) translateY(-2px);}
+  .dz-text{font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:0.25rem;}
+  .dz-sub{font-size:0.78rem;color:var(--text-muted);}
+  .dz-sub strong{color:var(--green-lime);}
+  .file-preview{display:none;align-items:center;gap:0.75rem;padding:0.85rem 1rem;background:var(--success-bg);border:1px solid var(--success-bdr);border-radius:10px;margin-top:0.75rem;}
+  .file-preview.show{display:flex;}
+  .file-preview .fname{font-size:0.88rem;font-weight:500;color:var(--green-light);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .file-preview .remove-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:1.1rem;padding:0.2rem;border-radius:4px;transition:color 0.2s;}
+  .file-preview .remove-btn:hover{color:#ff6b6b;}
+  .status{display:none;padding:0.85rem 1rem;border-radius:10px;font-size:0.88rem;margin-bottom:1rem;border:1px solid transparent;}
+  .status.show{display:block;}
+  .status.success{background:var(--success-bg);border-color:var(--success-bdr);color:var(--green-light);}
+  .status.error{background:var(--error-bg);border-color:var(--error-bdr);color:#ff8a8a;}
+  .btn-submit{width:100%;padding:1rem 1.5rem;font-family:'Outfit',sans-serif;font-size:1rem;font-weight:600;letter-spacing:0.05em;color:#fff;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(135deg,var(--green-dark),var(--green-mid));box-shadow:0 4px 20px rgba(46,168,46,0.35);transition:opacity 0.2s,transform 0.15s,box-shadow 0.2s;position:relative;overflow:hidden;}
+  .btn-submit:hover{opacity:0.92;transform:translateY(-1px);box-shadow:0 6px 28px rgba(46,168,46,0.45);}
+  .btn-submit:active{transform:translateY(0);}
+  .btn-submit.loading{pointer-events:none;opacity:0.75;}
+  .btn-submit.loading::after{content:'';position:absolute;top:50%;left:50%;width:18px;height:18px;margin:-9px 0 0 -9px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;}
+  .success-screen{display:none;text-align:center;padding:2rem;animation:fadeUp 0.5s ease both;}
+  .success-screen.show{display:block;}
+  .success-icon{font-size:3.5rem;margin-bottom:1rem;display:block;animation:pop 0.4s 0.1s ease both;}
+  .success-screen h2{font-size:1.6rem;font-weight:700;color:var(--text);margin-bottom:0.5rem;}
+  .success-screen p{color:var(--text-muted);font-size:0.95rem;margin-bottom:1.5rem;}
+  .btn-otro{background:none;border:1px solid var(--border);color:var(--text-muted);padding:0.75rem 1.5rem;border-radius:10px;cursor:pointer;font-family:'Outfit',sans-serif;font-size:0.9rem;transition:border-color 0.2s,color 0.2s;}
+  .btn-otro:hover{border-color:var(--green-lime);color:var(--green-lime);}
+  .privacy{margin-top:1.5rem;font-size:0.72rem;color:var(--text-dim);text-align:center;line-height:1.6;}
+  @keyframes fadeDown{from{opacity:0;transform:translateY(-12px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  @keyframes pop{0%{transform:scale(0.5);opacity:0;}80%{transform:scale(1.1);}100%{transform:scale(1);opacity:1;}}
 </style>
 </head>
 <body>
@@ -140,21 +75,17 @@
     <h1>Enviá tu <span>comprobante</span></h1>
     <p class="subtitle">Cargá tu transferencia y la registramos automáticamente.</p>
   </div>
-
   <div id="form-section">
     <div class="card">
       <div id="status" class="status"></div>
-
       <div class="field">
         <label for="nombre">Nombre completo</label>
         <input type="text" id="nombre" placeholder="Tu nombre y apellido" autocomplete="name">
       </div>
-
       <div class="field">
         <label for="celular">Número de celular</label>
         <input type="tel" id="celular" placeholder="+54 299 555 0000" autocomplete="tel">
       </div>
-
       <div class="field">
         <label>Comprobante de transferencia</label>
         <div class="dropzone" id="dropzone">
@@ -169,190 +100,117 @@
           <button class="remove-btn" onclick="removeFile()">✕</button>
         </div>
       </div>
-
-      <button class="btn-submit" id="btn-submit" onclick="enviar()">
-        ENVIAR COMPROBANTE →
-      </button>
+      <button class="btn-submit" id="btn-submit" onclick="enviar()">ENVIAR COMPROBANTE →</button>
     </div>
-
-    <p class="privacy">
-      🔒 Tus datos se almacenan de forma segura.<br>
-      No compartimos tu información con terceros.
-    </p>
+    <p class="privacy">🔒 Tus datos se almacenan de forma segura.<br>No compartimos tu información con terceros.</p>
   </div>
-
   <div class="success-screen" id="success-screen">
     <span class="success-icon">✅</span>
     <h2>¡Comprobante enviado!</h2>
-    <p>Recibimos tu comprobante.</p>
+    <p>Recibimos tu transferencia.</p>
     <button class="btn-otro" onclick="resetForm()">Enviar otro comprobante</button>
-    <p style="margin-top:1.5rem; font-size:0.82rem; color:var(--text-dim);">
-      Tu confianza es lo que nos mueve. ¡Gracias por elegirnos!
-    </p>
+    <p style="margin-top:1.5rem;font-size:0.82rem;color:var(--text-dim);">Tu confianza es lo que nos mueve. ¡Gracias por elegirnos!</p>
   </div>
 </div>
-
 <script>
   const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznQLZ2fLr-6wOvDbfNvPQehKQL7LTZPpjy9bhrJ3roBeWDttRx0JQcS9PnW9pZGrpY/exec";
-  const GEMINI_API_KEY    = "AIzaSyBvM2yI6_uRc48RpQmFvAmSa9q5sU2ceXM";
 
   let archivoSeleccionado = null;
 
   const dz = document.getElementById('dropzone');
-  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
-  dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
-  dz.addEventListener('drop', e => {
-    e.preventDefault();
-    dz.classList.remove('drag-over');
-    const f = e.dataTransfer.files[0];
-    if (f) setFile(f);
+  dz.addEventListener('dragover', function(e){ e.preventDefault(); dz.classList.add('drag-over'); });
+  dz.addEventListener('dragleave', function(){ dz.classList.remove('drag-over'); });
+  dz.addEventListener('drop', function(e){
+    e.preventDefault(); dz.classList.remove('drag-over');
+    if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
   });
 
-  function handleFile(input) {
-    if (input.files[0]) setFile(input.files[0]);
-  }
+  function handleFile(input){ if (input.files[0]) setFile(input.files[0]); }
 
-  function setFile(file) {
-    if (file.size > 10 * 1024 * 1024) {
-      showStatus('El archivo supera los 10 MB. Por favor usá una imagen más liviana.', 'error');
-      return;
-    }
+  function setFile(file){
+    if (file.size > 10*1024*1024){ showStatus('El archivo supera los 10 MB.','error'); return; }
     archivoSeleccionado = file;
     document.getElementById('fname').textContent = file.name;
     document.getElementById('file-preview').classList.add('show');
     dz.style.display = 'none';
   }
 
-  function removeFile() {
+  function removeFile(){
     archivoSeleccionado = null;
     document.getElementById('file-preview').classList.remove('show');
     document.getElementById('archivo').value = '';
     dz.style.display = '';
   }
 
-  function showStatus(msg, type) {
-    const el = document.getElementById('status');
+  function showStatus(msg, type){
+    var el = document.getElementById('status');
     el.textContent = msg;
     el.className = 'status show ' + type;
   }
 
-  function hideStatus() {
-    document.getElementById('status').className = 'status';
-  }
+  function hideStatus(){ document.getElementById('status').className = 'status'; }
 
-  function toBase64(file) {
-    return new Promise((res, rej) => {
-      const r = new FileReader();
-      r.onload = () => res(r.result.split(',')[1]);
+  function toBase64(file){
+    return new Promise(function(res, rej){
+      var r = new FileReader();
+      r.onload = function(){ res(r.result.split(',')[1]); };
       r.onerror = rej;
       r.readAsDataURL(file);
     });
   }
 
-  function esperar(ms) {
-    return new Promise(res => setTimeout(res, ms));
-  }
-
-  async function llamarGemini(body, intento) {
-    intento = intento || 1;
-    const resp = await fetch(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + GEMINI_API_KEY,
-      { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
-    );
-    const data = await resp.json();
-    if (!resp.ok) {
-      const errMsg = data && data.error ? data.error.message : '';
-      const esQuota = errMsg.includes('quota') || errMsg.includes('RESOURCE_EXHAUSTED') || resp.status === 429;
-      if (esQuota && intento <= 4) {
-        const segundos = intento * 12;
-        showStatus('Mucho trafico en este momento. Reintentando en ' + segundos + ' segundos... (' + intento + '/4)', 'success');
-        await esperar(segundos * 1000);
-        return llamarGemini(body, intento + 1);
-      }
-      throw new Error('Gemini: ' + (errMsg || 'Error desconocido'));
-    }
-    return data;
-  }
-
-  async function extraerDatos(file) {
-    const base64 = await toBase64(file);
-    let mimeType = file.type;
-    if (!mimeType || mimeType === 'application/octet-stream') {
-      const ext = file.name.split('.').pop().toLowerCase();
-      if (ext === 'pdf') mimeType = 'application/pdf';
-      else if (ext === 'png') mimeType = 'image/png';
-      else mimeType = 'image/jpeg';
-    }
-    const prompt = 'Sos un asistente especializado en leer comprobantes de transferencias bancarias argentinas. Analiza el archivo y extrae EXACTAMENTE estos datos: 1. numero_foto 2. fecha en DD/MM/AAAA 3. hora en HH:MM 4. coelsa 5. monto (solo numeros y punto decimal) 6. cuit (solo numeros sin guiones) 7. nombre_depositante 8. banco_depositante 9. nombre_receptor. Responde UNICAMENTE con un objeto JSON valido con esas 9 claves. Si no encontras algun dato deja el campo como cadena vacia. No agregues texto ni explicaciones fuera del JSON.';
-    const body = {
-      contents: [{ parts: [{ text: prompt }, { inline_data: { mime_type: mimeType, data: base64 } }] }]
-    };
-    const data = await llamarGemini(body);
-    const parts = data.candidates[0].content.parts;
-    const textPart = parts.find(function(p) { return p.text && !p.thought; });
-    const text = textPart ? textPart.text : parts[parts.length - 1].text;
-    const clean = text.replace(/```json|```/g, '').trim();
-    return JSON.parse(clean);
-  }
-
-  async function enviarASheets(payload) {
-    const resp = await fetch(GOOGLE_SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify(payload)
-    });
-    if (!resp.ok) throw new Error('Error al guardar en la planilla');
-    return resp.json();
-  }
-
-  async function enviar() {
+  async function enviar(){
     hideStatus();
-    const nombre  = document.getElementById('nombre').value.trim();
-    const celular = document.getElementById('celular').value.trim();
-    if (!nombre)  { showStatus('Por favor ingresa tu nombre completo.', 'error'); return; }
-    if (!celular) { showStatus('Por favor ingresa tu numero de celular.', 'error'); return; }
-    if (!archivoSeleccionado) { showStatus('Por favor adjunta el comprobante.', 'error'); return; }
+    var nombre  = document.getElementById('nombre').value.trim();
+    var celular = document.getElementById('celular').value.trim();
+    if (!nombre)  { showStatus('Por favor ingresa tu nombre completo.','error'); return; }
+    if (!celular) { showStatus('Por favor ingresa tu numero de celular.','error'); return; }
+    if (!archivoSeleccionado) { showStatus('Por favor adjunta el comprobante.','error'); return; }
 
-    const btn = document.getElementById('btn-submit');
+    var btn = document.getElementById('btn-submit');
     btn.classList.add('loading');
     btn.disabled = true;
 
     try {
-      showStatus('Leyendo el comprobante con IA...', 'success');
-      const datosComprobante = await extraerDatos(archivoSeleccionado);
-      const base64Archivo = await toBase64(archivoSeleccionado);
-      const payload = {
+      showStatus('Procesando comprobante...', 'success');
+      var base64 = await toBase64(archivoSeleccionado);
+      var mimeType = archivoSeleccionado.type || 'image/jpeg';
+      if (!mimeType || mimeType === 'application/octet-stream') {
+        var ext = archivoSeleccionado.name.split('.').pop().toLowerCase();
+        mimeType = ext === 'pdf' ? 'application/pdf' : ext === 'png' ? 'image/png' : 'image/jpeg';
+      }
+      var payload = {
         nombre_cliente:  nombre,
         celular_cliente: celular,
         fecha_carga:     new Date().toLocaleString('es-AR'),
-        archivo_base64:  base64Archivo,
+        archivo_base64:  base64,
         archivo_nombre:  archivoSeleccionado.name,
-        archivo_tipo:    archivoSeleccionado.type || 'image/jpeg'
+        archivo_tipo:    mimeType
       };
-      for (var k in datosComprobante) { payload[k] = datosComprobante[k]; }
       showStatus('Guardando comprobante...', 'success');
-      await enviarASheets(payload);
+      var resp = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+      if (!resp.ok) throw new Error('Error al guardar');
+      var result = await resp.json();
+      if (!result.ok) throw new Error(result.error || 'Error desconocido');
       document.getElementById('form-section').style.display = 'none';
       document.getElementById('success-screen').classList.add('show');
-    } catch (err) {
-      showStatus('Ocurrio un error: ' + err.message + '. Intenta de nuevo o contactanos.', 'error');
+    } catch(err){
+      showStatus('Ocurrio un error: ' + err.message + '. Intenta de nuevo o contactanos.','error');
     } finally {
       btn.classList.remove('loading');
       btn.disabled = false;
     }
   }
 
-  function resetForm() {
+  function resetForm(){
     document.getElementById('nombre').value = '';
     document.getElementById('celular').value = '';
-    removeFile();
-    hideStatus();
+    removeFile(); hideStatus();
     document.getElementById('form-section').style.display = '';
     document.getElementById('success-screen').classList.remove('show');
   }
 
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) enviar();
-  });
+  document.addEventListener('keydown', function(e){ if (e.key==='Enter' && !e.shiftKey) enviar(); });
 </script>
 </body>
 </html>
