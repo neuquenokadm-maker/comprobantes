@@ -1,476 +1,12 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Enviar Comprobante — OK Neuquén</title>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --green-dark:  #1a7a1a;
-    --green-mid:   #2ea82e;
-    --green-lime:  #7ec820;
-    --green-light: #a8e040;
-    --bg-dark:     #1c2b1c;
-    --bg-mid:      #243324;
-    --bg-card:     #1e2e1e;
-    --surface:     #253625;
-    --border:      rgba(126,200,32,0.22);
-    --border-soft: rgba(126,200,32,0.12);
-    --text:        #f0f7e8;
-    --text-muted:  #8aac72;
-    --text-dim:    #5a7a4a;
-    --success-bg:  rgba(46,168,46,0.15);
-    --success-bdr: rgba(46,168,46,0.4);
-    --error-bg:    rgba(220,60,60,0.12);
-    --error-bdr:   rgba(220,60,60,0.35);
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Outfit', sans-serif;
-    background: var(--bg-dark);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2.5rem 1rem;
-    position: relative;
-    overflow-x: hidden;
-  }
-
-  /* Gradient background glow */
-  body::before {
-    content: '';
-    position: fixed;
-    top: -20%;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 700px;
-    height: 500px;
-    background: radial-gradient(ellipse, rgba(46,168,46,0.18) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  body::after {
-    content: '';
-    position: fixed;
-    bottom: -10%;
-    right: -10%;
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(ellipse, rgba(126,200,32,0.09) 0%, transparent 65%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .wrap {
-    width: 100%;
-    max-width: 500px;
-    position: relative;
-    z-index: 2;
-  }
-
-  /* ── Logo ── */
-  .logo-wrap {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 2rem;
-    animation: fadeDown 0.5s ease both;
-  }
-
-  .logo-wrap img {
-    height: 48px;
-    width: auto;
-    filter: drop-shadow(0 0 12px rgba(126,200,32,0.35));
-  }
-
-  /* ── Header ── */
-  .header {
-    text-align: center;
-    margin-bottom: 2rem;
-    animation: fadeDown 0.55s 0.05s ease both;
-  }
-
-  .eyebrow {
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--green-lime);
-    margin-bottom: 0.65rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.6rem;
-  }
-
-  .eyebrow::before, .eyebrow::after {
-    content: '';
-    display: inline-block;
-    width: 28px; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--green-lime));
-  }
-  .eyebrow::after {
-    background: linear-gradient(90deg, var(--green-lime), transparent);
-  }
-
-  h1 {
-    font-size: clamp(1.8rem, 5vw, 2.4rem);
-    font-weight: 700;
-    line-height: 1.2;
-    color: var(--text);
-    margin-bottom: 0.6rem;
-    letter-spacing: -0.02em;
-  }
-
-  h1 span {
-    background: linear-gradient(90deg, var(--green-mid), var(--green-lime));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .subtitle {
-    font-size: 0.92rem;
-    color: var(--text-muted);
-    font-weight: 300;
-    line-height: 1.6;
-  }
-
-  /* ── Card ── */
-  .card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 2.25rem;
-    box-shadow:
-      0 0 0 1px var(--border-soft),
-      0 4px 40px rgba(0,0,0,0.5),
-      inset 0 1px 0 rgba(126,200,32,0.08);
-    animation: fadeUp 0.6s 0.1s ease both;
-  }
-
-  .field { margin-bottom: 1.4rem; }
-
-  label {
-    display: block;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 0.5rem;
-  }
-
-  input[type="text"],
-  input[type="tel"] {
-    width: 100%;
-    padding: 0.85rem 1rem;
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.97rem;
-    color: var(--text);
-    background: var(--surface);
-    border: 1px solid rgba(126,200,32,0.18);
-    border-radius: 10px;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
-  }
-
-  input[type="text"]::placeholder,
-  input[type="tel"]::placeholder { color: var(--text-dim); }
-
-  input[type="text"]:focus,
-  input[type="tel"]:focus {
-    border-color: var(--green-lime);
-    box-shadow: 0 0 0 3px rgba(126,200,32,0.15);
-    background: rgba(37,54,37,0.9);
-  }
-
-  /* ── Dropzone ── */
-  .dropzone {
-    border: 2px dashed rgba(126,200,32,0.3);
-    border-radius: 12px;
-    padding: 2.25rem 1.5rem;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
-    background: var(--surface);
-    position: relative;
-  }
-
-  .dropzone:hover, .dropzone.drag-over {
-    border-color: var(--green-lime);
-    background: rgba(126,200,32,0.06);
-  }
-
-  .dropzone input[type="file"] {
-    position: absolute;
-    inset: 0;
-    width: 100%; height: 100%;
-    opacity: 0; cursor: pointer;
-  }
-
-  .dz-icon {
-    font-size: 2.2rem;
-    margin-bottom: 0.65rem;
-    display: block;
-    transition: transform 0.2s;
-    filter: grayscale(0.2);
-  }
-
-  .dropzone:hover .dz-icon { transform: scale(1.12) translateY(-2px); }
-
-  .dz-text {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--text);
-    margin-bottom: 0.25rem;
-  }
-
-  .dz-sub { font-size: 0.78rem; color: var(--text-muted); }
-  .dz-sub strong { color: var(--green-lime); }
-
-  /* ── File preview ── */
-  .file-preview {
-    display: none;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.85rem 1rem;
-    background: var(--success-bg);
-    border: 1px solid var(--success-bdr);
-    border-radius: 10px;
-    margin-top: 0.75rem;
-  }
-
-  .file-preview.show { display: flex; }
-
-  .file-preview .fname {
-    font-size: 0.88rem;
-    font-weight: 500;
-    color: var(--green-light);
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .file-preview .remove-btn {
-    background: none; border: none; cursor: pointer;
-    color: var(--green-lime); font-size: 1rem;
-    padding: 0; line-height: 1; opacity: 0.7;
-    transition: opacity 0.2s;
-  }
-  .file-preview .remove-btn:hover { opacity: 1; }
-
-  /* ── Divider ── */
-  .divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
-    margin: 1.5rem 0;
-  }
-
-  /* ── Submit button ── */
-  .btn-submit {
-    width: 100%;
-    padding: 1rem;
-    font-family: 'Outfit', sans-serif;
-    font-size: 0.88rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #fff;
-    background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 50%, var(--green-lime) 100%);
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
-    box-shadow: 0 4px 20px rgba(46,168,46,0.3);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn-submit::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-
-  .btn-submit:hover { box-shadow: 0 6px 28px rgba(46,168,46,0.45); opacity: 0.93; }
-  .btn-submit:hover::before { opacity: 1; }
-  .btn-submit:active { transform: scale(0.99); }
-
-  .btn-submit:disabled {
-    opacity: 0.4; cursor: not-allowed; pointer-events: none;
-  }
-
-  .btn-submit .spinner {
-    display: none;
-    width: 16px; height: 16px;
-    border: 2px solid rgba(255,255,255,0.35);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    margin: 0 auto;
-  }
-
-  .btn-submit.loading .btn-text { display: none; }
-  .btn-submit.loading .spinner { display: block; }
-
-  /* ── Status ── */
-  .status {
-    display: none;
-    padding: 0.9rem 1.1rem;
-    border-radius: 10px;
-    font-size: 0.88rem;
-    margin-top: 1rem;
-    line-height: 1.5;
-  }
-
-  .status.show { display: block; }
-  .status.error  { background: var(--error-bg);   border: 1px solid var(--error-bdr);   color: #ff9a9a; }
-  .status.success{ background: var(--success-bg); border: 1px solid var(--success-bdr); color: var(--green-light); }
-
-  /* ── Success screen ── */
-  .success-screen {
-    display: none; text-align: center; padding: 1rem 0;
-    animation: fadeUp 0.5s ease both;
-  }
-  .success-screen.show { display: block; }
-
-  .success-icon {
-    font-size: 3.5rem; margin-bottom: 1rem; display: block;
-    animation: popIn 0.5s cubic-bezier(0.175,0.885,0.32,1.275) both;
-    filter: drop-shadow(0 0 16px rgba(126,200,32,0.5));
-  }
-
-  .success-screen h2 {
-    font-size: 1.7rem; font-weight: 700; margin-bottom: 0.5rem;
-    background: linear-gradient(90deg, var(--green-mid), var(--green-lime));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  }
-
-  .success-screen p { color: var(--text-muted); font-size: 0.93rem; }
-
-  .reset-btn {
-    display: inline-block; margin-top: 1.5rem;
-    padding: 0.6rem 1.5rem;
-    font-family: 'Outfit', sans-serif; font-size: 0.78rem;
-    font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--text-muted);
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 8px; cursor: pointer; transition: all 0.2s;
-  }
-  .reset-btn:hover { border-color: var(--green-lime); color: var(--green-lime); }
-
-  /* ── Note ── */
-  .note {
-    text-align: center; margin-top: 1.5rem;
-    font-size: 0.73rem; color: var(--text-dim); line-height: 1.7;
-    animation: fadeUp 0.6s 0.3s ease both;
-  }
-
-  /* ── Animations ── */
-  @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes popIn {
-    from { transform: scale(0.4); opacity: 0; }
-    to   { transform: scale(1); opacity: 1; }
-  }
-
-  @media (max-width: 480px) {
-    .card { padding: 1.6rem 1.2rem; border-radius: 12px; }
-  }
-</style>
-</head>
-<body>
-
-<div class="wrap">
-
-  <div class="header">
-    <div class="eyebrow">Comprobante de pago</div>
-    <h1>Enviá tu <span>comprobante</span></h1>
-    <p class="subtitle">Tu confianza es lo que nos mueve.<br>¡Gracias por elegirnos!</p>
-  </div>
-
-  <div class="card">
-    <!-- Formulario -->
-    <div id="form-section">
-      <div class="field">
-        <label>Nombre completo</label>
-        <input type="text" id="nombre" placeholder="Ej: María González" autocomplete="name">
-      </div>
-
-      <div class="field">
-        <label>Número de celular</label>
-        <input type="tel" id="celular" placeholder="Ej: 2990000000" autocomplete="tel">
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="field">
-        <label>Comprobante de transferencia</label>
-        <div class="dropzone" id="dropzone">
-          <input type="file" id="archivo" accept="image/*,.pdf" onchange="handleFile(this)">
-          <span class="dz-icon">📎</span>
-          <div class="dz-text">Tocá para adjuntar</div>
-          <div class="dz-sub">Imagen o PDF · <strong>Máx. 10 MB</strong></div>
-        </div>
-        <div class="file-preview" id="file-preview">
-          <span>✅</span>
-          <span class="fname" id="fname"></span>
-          <button class="remove-btn" onclick="removeFile()">✕</button>
-        </div>
-      </div>
-
-      <button class="btn-submit" id="btn-submit" onclick="enviar()">
-        <span class="btn-text">Enviar comprobante →</span>
-        <div class="spinner"></div>
-      </button>
-
-      <div class="status" id="status"></div>
-    </div>
-
-    <!-- Éxito -->
-    <div class="success-screen" id="success-screen">
-      <span class="success-icon">🎉</span>
-      <h2>¡Comprobante enviado!</h2>
-      <p>Recibimos tu transferencia.</p>
-      <button class="reset-btn" onclick="resetForm()">Enviar otro</button>
-    </div>
-  </div>
-
-  <p class="note">
-    🔒 Tus datos son confidenciales y solo los ve el titular de la cuenta.<br>
-    No compartimos tu información con terceros.
-  </p>
-</div>
-
 <script>
   // ─── CONFIGURACIÓN ───────────────────────────────────────────────
-  // Reemplazá estos valores con los tuyos al configurar el sistema:
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznQLZ2fLr-6wOvDbfNvPQehKQL7LTZPpjy9bhrJ3roBeWDttRx0JQcS9PnW9pZGrpY/exec"; // Ver INSTRUCCIONES.md
-  const GEMINI_API_KEY    = "AIzaSyCR4eRHI3deG9zb1CQdL3hbGC1RTNKokBI";     // Ver INSTRUCCIONES.md
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbznQLZ2fLr-6wOvDbfNvPQehKQL7LTZPpjy9bhrJ3roBeWDttRx0JQcS9PnW9pZGrpY/exec"; 
+  const GEMINI_API_KEY    = "AIzaSyCR4eRHI3deG9zb1CQdL3hbGC1RTNKokBI"; // Recomiendo generar una nueva si esta fue anulada
   // ──────────────────────────────────────────────────────────────────
 
   let archivoSeleccionado = null;
 
-  // Drag & drop
+  // Drag & drop logic
   const dz = document.getElementById('dropzone');
   dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
   dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
@@ -487,7 +23,7 @@
 
   function setFile(file) {
     if (file.size > 10 * 1024 * 1024) {
-      showStatus('El archivo supera los 10 MB. Por favor usá una imagen más liviana.', 'error');
+      showStatus('El archivo supera los 10 MB.', 'error');
       return;
     }
     archivoSeleccionado = file;
@@ -513,7 +49,6 @@
     document.getElementById('status').className = 'status';
   }
 
-  // ── Leer archivo como base64 ──
   function toBase64(file) {
     return new Promise((res, rej) => {
       const r = new FileReader();
@@ -523,51 +58,14 @@
     });
   }
 
-  // ── Llamada a Gemini para extraer datos del comprobante ──
-  async function extraerDatos(file) {
-    const base64 = await toBase64(file);
-
-    // Detectar tipo correcto
-    let mimeType = file.type;
-    if (!mimeType || mimeType === 'application/octet-stream') {
-      const ext = file.name.split('.').pop().toLowerCase();
-      if (ext === 'pdf') mimeType = 'application/pdf';
-      else if (ext === 'png') mimeType = 'image/png';
-      else mimeType = 'image/jpeg';
-    }
-
-    const prompt = `Sos un asistente especializado en leer comprobantes de transferencias bancarias argentinas.
-Analizá el archivo (puede ser imagen o PDF) y extraé EXACTAMENTE los siguientes datos sin modificar ningún valor:
-1. numero_foto: número de foto o referencia del comprobante
-2. fecha: fecha en formato DD/MM/AAAA
-3. hora: hora en formato HH:MM
-4. coelsa: código COELSA o identificador de la operación
-5. monto: monto numérico (solo números y punto decimal, sin $ ni puntos de miles)
-6. cuit: CUIT del depositante solo números sin guiones ni espacios
-7. nombre_depositante: nombre y apellido completo de quien envía
-8. banco_depositante: banco o billetera de quien envía (ej: Mercado Pago, Banco Nación, etc.)
-9. nombre_receptor: nombre y apellido del titular de la cuenta que recibe
-
-Respondé ÚNICAMENTE con un objeto JSON válido con esas 9 claves. Si no encontrás algún dato, dejá el campo como cadena vacía "". No agregues texto ni explicaciones fuera del JSON.`;
-
-    const body = {
-      contents: [{
-        parts: [
-          { text: prompt },
-          { inline_data: { mime_type: mimeType, data: base64 } }
-        ]
-      }]
-    };
-
-  // ── Esperar N segundos ──
   function esperar(ms) {
     return new Promise(res => setTimeout(res, ms));
   }
 
-  // ── Llamada a Gemini con reintento automático ──
+  // Llamada a Gemini corregida (Modelo 1.5 Flash)
   async function llamarGemini(body, intento = 1) {
     const resp = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
       { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }
     );
 
@@ -575,48 +73,24 @@ Respondé ÚNICAMENTE con un objeto JSON válido con esas 9 claves. Si no encont
 
     if (!resp.ok) {
       const errMsg = data?.error?.message || '';
-      const esQuota = errMsg.includes('quota') || errMsg.includes('RESOURCE_EXHAUSTED') || resp.status === 429;
+      const esQuota = resp.status === 429 || errMsg.includes('quota');
 
-      // Reintenta hasta 4 veces con espera creciente
-      if (esQuota && intento <= 4) {
-        const segundos = intento * 12;
-        showStatus(`⏳ Mucho tráfico en este momento. Reintentando en ${segundos} segundos... (${intento}/4)`, 'success');
+      if (esQuota && intento <= 3) {
+        const segundos = intento * 5;
+        showStatus(`⏳ Reintentando en ${segundos}s...`, 'success');
         await esperar(segundos * 1000);
         return llamarGemini(body, intento + 1);
       }
-
-      throw new Error('Gemini: ' + (errMsg || 'Error desconocido'));
+      throw new Error(errMsg || 'Error en la API de IA');
     }
-
     return data;
   }
 
-  // ── Llamada a Gemini para extraer datos del comprobante ──
   async function extraerDatos(file) {
     const base64 = await toBase64(file);
+    let mimeType = file.type || 'image/jpeg';
 
-    // Detectar tipo correcto
-    let mimeType = file.type;
-    if (!mimeType || mimeType === 'application/octet-stream') {
-      const ext = file.name.split('.').pop().toLowerCase();
-      if (ext === 'pdf') mimeType = 'application/pdf';
-      else if (ext === 'png') mimeType = 'image/png';
-      else mimeType = 'image/jpeg';
-    }
-
-    const prompt = `Sos un asistente especializado en leer comprobantes de transferencias bancarias argentinas.
-Analizá el archivo (puede ser imagen o PDF) y extraé EXACTAMENTE los siguientes datos sin modificar ningún valor:
-1. numero_foto: número de foto o referencia del comprobante
-2. fecha: fecha en formato DD/MM/AAAA
-3. hora: hora en formato HH:MM
-4. coelsa: código COELSA o identificador de la operación
-5. monto: monto numérico (solo números y punto decimal, sin $ ni puntos de miles)
-6. cuit: CUIT del depositante solo números sin guiones ni espacios
-7. nombre_depositante: nombre y apellido completo de quien envía
-8. banco_depositante: banco o billetera de quien envía (ej: Mercado Pago, Banco Nación, etc.)
-9. nombre_receptor: nombre y apellido del titular de la cuenta que recibe
-
-Respondé ÚNICAMENTE con un objeto JSON válido con esas 9 claves. Si no encontrás algún dato, dejá el campo como cadena vacía "". No agregues texto ni explicaciones fuera del JSON.`;
+    const prompt = `Sos un asistente especializado en comprobantes argentinos. Extraé en JSON: numero_foto, fecha, hora, coelsa, monto, cuit, nombre_depositante, banco_depositante, nombre_receptor. Solo el JSON, sin texto extra.`;
 
     const body = {
       contents: [{
@@ -628,39 +102,27 @@ Respondé ÚNICAMENTE con un objeto JSON válido con esas 9 claves. Si no encont
     };
 
     const data = await llamarGemini(body);
-
-    // Gemini 2.5 thinking models wrap response differently
-    const parts = data.candidates?.[0]?.content?.parts || [];
-    const textPart = parts.find(p => p.text && !p.thought);
-    const text = textPart?.text || parts[parts.length - 1]?.text || '{}';
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
     const clean = text.replace(/```json|```/g, '').trim();
     return JSON.parse(clean);
   }
 
-  // ── Enviar a Google Sheets vía Apps Script ──
   async function enviarASheets(payload) {
     const resp = await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
       body: JSON.stringify(payload)
     });
-    if (!resp.ok) throw new Error('Error al guardar en la planilla');
+    if (!resp.ok) throw new Error('No se pudo conectar con la planilla');
     return resp.json();
   }
 
-  // ── Función principal ──
   async function enviar() {
     hideStatus();
-
-    const nombre  = document.getElementById('nombre').value.trim();
+    const nombre = document.getElementById('nombre').value.trim();
     const celular = document.getElementById('celular').value.trim();
 
-    if (!nombre)  { showStatus('Por favor ingresá tu nombre completo.', 'error'); return; }
-    if (!celular) { showStatus('Por favor ingresá tu número de celular.', 'error'); return; }
-    if (!archivoSeleccionado) { showStatus('Por favor adjuntá el comprobante.', 'error'); return; }
-
-    // Modo demo: si no están configuradas las URLs reales
-    if (GOOGLE_SCRIPT_URL === "TU_URL_DE_APPS_SCRIPT_AQUI") {
-      showStatus('⚙️ Modo demo: configurá las URLs en el código para activar el envío real. Ver INSTRUCCIONES.md', 'error');
+    if (!nombre || !celular || !archivoSeleccionado) {
+      showStatus('Completá todos los campos.', 'error');
       return;
     }
 
@@ -669,34 +131,28 @@ Respondé ÚNICAMENTE con un objeto JSON válido con esas 9 claves. Si no encont
     btn.disabled = true;
 
     try {
-      // 1. Extraer datos con IA
-      showStatus('🤖 Leyendo el comprobante con IA...', 'success');
+      showStatus('🤖 Analizando con IA...', 'success');
       const datosComprobante = await extraerDatos(archivoSeleccionado);
-
-      // 2. Convertir archivo a base64 para subir a Drive
+      
+      showStatus('📤 Subiendo comprobante...', 'success');
       const base64Archivo = await toBase64(archivoSeleccionado);
-
-      // 3. Armar payload completo
+      
       const payload = {
-        nombre_cliente:      nombre,
-        celular_cliente:     celular,
-        fecha_carga:         new Date().toLocaleString('es-AR'),
-        archivo_base64:      base64Archivo,
-        archivo_nombre:      archivoSeleccionado.name,
-        archivo_tipo:        archivoSeleccionado.type || 'image/jpeg',
+        nombre_cliente: nombre,
+        celular_cliente: celular,
+        fecha_carga: new Date().toLocaleString('es-AR'),
+        archivo_base64: base64Archivo,
+        archivo_nombre: archivoSeleccionado.name,
+        archivo_tipo: archivoSeleccionado.type || 'image/jpeg',
         ...datosComprobante
       };
 
-      // 4. Enviar a Google Sheets y Drive
-      showStatus('📤 Guardando comprobante...', 'success');
       await enviarASheets(payload);
 
-      // 5. Éxito
       document.getElementById('form-section').style.display = 'none';
       document.getElementById('success-screen').classList.add('show');
-
     } catch (err) {
-      showStatus('Ocurrió un error: ' + err.message + '. Intentá de nuevo o contactanos.', 'error');
+      showStatus('Error: ' + err.message, 'error');
     } finally {
       btn.classList.remove('loading');
       btn.disabled = false;
@@ -704,18 +160,6 @@ Respondé ÚNICAMENTE con un objeto JSON válido con esas 9 claves. Si no encont
   }
 
   function resetForm() {
-    document.getElementById('nombre').value = '';
-    document.getElementById('celular').value = '';
-    removeFile();
-    hideStatus();
-    document.getElementById('form-section').style.display = '';
-    document.getElementById('success-screen').classList.remove('show');
+    location.reload(); // Recarga simple para limpiar todo
   }
-
-  // Enter para enviar
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) enviar();
-  });
 </script>
-</body>
-</html>
